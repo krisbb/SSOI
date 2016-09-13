@@ -53,7 +53,6 @@ void CReadDlg::DoDataExchange(CDataExchange* pDX)
 
 void CReadDlg::init()
 {
-	
 	this->FileType.InsertString(0,L"Transparent");
 	this->FileType.InsertString(1,L"Linear fixed");
 	this->FileType.InsertString(2,L"Linear variable");
@@ -62,6 +61,7 @@ void CReadDlg::init()
 	this->FileType.SetCurSel(0);
 	
 	this->Offset.SetWindowTextW(L"00 00");
+	this->FileLength.SetWindowTextW(L"08");
 	this->RecordNum.SetWindowTextW(L"1");
 }
 
@@ -84,23 +84,21 @@ BEGIN_INTERFACE_MAP(CReadDlg, CDialogEx)
 	INTERFACE_PART(CReadDlg, IID_IReadDlg, Dispatch)
 END_INTERFACE_MAP()
 
-
 // CReadDlg message handlers
-
 
 void CReadDlg::OnBnClickedOk()
 {
 	CString ChoosenFileType, RecordNum, FileLength, Offset;
-	//Check Conversion
 	CString Number;
-	int num;
-	//
-
+	//int num;
+	
 	int index = this->FileType.GetCurSel();
 	int Length = this->FileType.GetLBTextLen(index);
 	this->FileType.GetLBText(index , ChoosenFileType.GetBuffer(Length)); 
 	this->FileLength.GetWindowTextW(FileLength);
 
+	/* Maybe in the next version
+	   requirement was dinamically switching beetwen hex and dec -> aborted for that reason
 	if(this->IsDlgButtonChecked(IDC_RDEC))
 		{
 			num = HexUtil::CStringatoi(FileLength);
@@ -108,7 +106,7 @@ void CReadDlg::OnBnClickedOk()
 			FileLength.SetString(tmp);
 			//this->PartCmd->Append(tmp);
 		}
-
+		*/
 
 	if( ChoosenFileType == "Transparent"){
 		
@@ -137,8 +135,6 @@ void CReadDlg::OnBnClickedOk()
 
 		this->PartCmd->Append(RecordNum + L" 04 ");
 		this->PartCmd->Append(FileLength);
-		//current EF or SID !!!!!
-		//this->PartCmd->Append("04");
 	}
 
 	CDialogEx::OnOK();
