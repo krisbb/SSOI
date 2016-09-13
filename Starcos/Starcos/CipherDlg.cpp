@@ -53,7 +53,7 @@ void CipherDlg::OnBnClickedOk()
 	
 	this->Mode.GetWindowTextW(Mode);
 	this->DataValue.GetWindowTextW(Data);
-	
+	Data.MakeUpper();
 
 	if(Mode == "Encipher")
 	{

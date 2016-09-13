@@ -43,8 +43,8 @@ BOOL AuthDlg::OnInitDialog()
 	CDialogEx::OnInitDialog();
 
 	
-	this->AuthType.InsertString( 0 , L"VERIFY WITH PIN");
-	this->AuthType.InsertString( 1 , L"CHANGE PIN");
+	this->AuthType.InsertString( 0 , L"Verify With Pin");
+	this->AuthType.InsertString( 1 , L"Change Pin");
 
 	//In next Version
 	//this->AuthType.AddString(L"External");
@@ -72,14 +72,14 @@ void AuthDlg::OnBnClickedOk()
 	//KeyNum.SetString(HexUtil::MakeParity(KeyNum,true));
 	//ResKey.SetString(HexUtil::MakeParity(ResKey,true));
 
-	if(AuthType == "VERIFY WITH PIN")
+	if(AuthType == "Verify With Pin")
 	{
 		this->PartCmd->Append(L"00 20 00 8");
 		this->PartCmd->Append(KeyNum + L" ");
 		this->PartCmd->Append(HexUtil::IntToHex(HexUtil::GetLength(PIN)));
 		this->PartCmd->Append(L" " + PIN);
 	}
-	else if(AuthType == "CHANGE PIN")
+	else if(AuthType == "Change Pin")
 	{
 		this->PartCmd->Append(L"00 24 00 8");
 		this->PartCmd->Append(KeyNum + L" ");

@@ -48,9 +48,7 @@ BOOL EnvDlg::OnInitDialog()
 	this->CheckRadioButton(IDC_RPUBKEY, IDC_RPRVKEY , IDC_RPRVKEY);
 	
 	//In next Version
-	//this->EnvType.InsertString( 4 , L"Verify Signature");
-	//this->EnvType.InsertString( 5 , L"External Auth");
-	//this->EnvType.InsertString( 6 , L"Internal Auth");
+	//this->EnvType.InsertString( 0 , L"Verify Signature");
 	//this->EnvType.InsertString( 0 , L"SM response");
 	//this->EnvType.InsertString( 0 , L"SM command");
 
@@ -67,12 +65,8 @@ END_MESSAGE_MAP()
 
 void EnvDlg::OnBnClickedOk()
 {
-	CString EnvType;
-	CString Data;
-	CString KeyVersion;
-	CString KeyNum;
-	CString AlgID;
-
+	CString EnvType , Data , KeyVersion , KeyNum , AlgID;
+	
 	this->PartCmd->Append( L"00 22 ");
 	this->EnvType.GetWindowTextW(EnvType);
 	this->KeyNum.GetWindowTextW(KeyNum);
@@ -150,14 +144,6 @@ void EnvDlg::OnBnClickedOk()
 	/*else if(EnvType == "Verify Signature")
 	{
 		this->PartCmd->Append(L"81 B6 ");
-	}
-	else if(EnvType == "External Auth")
-	{
-		this->PartCmd->Append(L"81 A4 ");
-	}
-	else if(EnvType == "Internal Auth")
-	{
-		this->PartCmd->Append(L"41 A4 ");
 	}*/
 
 	CDialogEx::OnOK();
