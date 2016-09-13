@@ -24,4 +24,7 @@ public:
 	CString * PartCmd;
 	CComboBox EnvType;
 	afx_msg void OnBnClickedOk();
+	CEdit AlgID;
+	CEdit KeyNum;
+	CEdit KeyVersion;
 };
