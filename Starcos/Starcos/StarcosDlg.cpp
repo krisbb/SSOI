@@ -16,6 +16,7 @@
 #include "CipherDlg.h"
 #include "EnvDlg.h"
 #include "SigDlg.h"
+#include "ExtIntDlg.h"
 #include "HexUtil.h"
 
 #ifdef _DEBUG
@@ -93,12 +94,13 @@ BEGIN_MESSAGE_MAP(CStarcosDlg, CDialogEx)
 	ON_COMMAND(ID_FILE_SELECT, &CStarcosDlg::OnFileSelect)
 	ON_COMMAND(ID_FILE_READ, &CStarcosDlg::OnFileRead)
 	ON_COMMAND(ID_FILE_UPDATE32774, &CStarcosDlg::OnFileUpdate)
-	ON_COMMAND(ID_AUTH, &CStarcosDlg::OnAuth)
+	ON_COMMAND(ID_PIN, &CStarcosDlg::OnPIN)
 	//ON_COMMAND(ID_CIPHER, &CStarcosDlg::OnCipher)
 	ON_COMMAND(ID_CIPHER_ENC, &CStarcosDlg::OnCipherEnc)
 	ON_COMMAND(ID_CIPHER_SETENV, &CStarcosDlg::OnCipherSetenv)
 	ON_COMMAND(ID_KEY, &CStarcosDlg::OnSig)
 	ON_BN_CLICKED(IDC_BRUTEF, &CStarcosDlg::OnBnClickedBrutef)
+	ON_COMMAND(ID_AUTH, &CStarcosDlg::OnAuth)
 END_MESSAGE_MAP()
 
 
@@ -604,7 +606,7 @@ void CStarcosDlg::OnFileUpdate()
 		this->CommandCtrl.SetWindowTextW(Output);
 }
 
-void CStarcosDlg::OnAuth()
+void CStarcosDlg::OnPIN()
 {
 	CString Output;
 	AuthDlg dlg(&Output);;
@@ -664,4 +666,15 @@ void CStarcosDlg::OnBnClickedBrutef()
 {
 	this->BruteForce();
 	// TODO: Add your control notification handler code here
+}
+
+
+void CStarcosDlg::OnAuth()
+{
+	CString Output;
+	ExtIntDlg dlg(&Output);;
+	INT_PTR Response = dlg.DoModal();
+
+	if(Response == IDOK)
+		this->CommandCtrl.SetWindowTextW(Output);
 }

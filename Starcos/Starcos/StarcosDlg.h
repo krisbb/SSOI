@@ -53,11 +53,12 @@ public:
 	afx_msg void OnFileSelect();
 	afx_msg void OnFileRead();
 	afx_msg void OnFileUpdate();
-	afx_msg void OnAuth();
+	afx_msg void OnPIN();
 	//afx_msg void OnCipher();
 	afx_msg void OnCipherEnc();
 	afx_msg void OnCipherSetenv();
 	afx_msg void OnSig();
 	afx_msg void OnBnClickedBrutef();
 	CEdit ResponseCtrl;
+	afx_msg void OnAuth();
 };
