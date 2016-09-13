@@ -29,5 +29,5 @@ public:
 	bool TestFID( CString FID , int Maxcount);
 	afx_msg void OnBnClickedOk();
 	CEdit FileID;
-	afx_msg void OnEnChangeEdit1();
+	//afx_msg void OnEnChangeEdit1(); function control what is passed to edit control 
 };

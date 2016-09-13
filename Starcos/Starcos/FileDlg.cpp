@@ -17,11 +17,6 @@ FileDlg::FileDlg( CString * Str , CWnd* pParent /*=NULL*/)
 	
 	EnableAutomation();
 	this->PartCmd = Str;
-
-	////////////////////////////////////
-	//REGEX ... 
-	//VISIBILITY depends on choose
-	////////////////////////////////////
 }
 
 FileDlg::~FileDlg()
@@ -47,7 +42,7 @@ void FileDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(FileDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &FileDlg::OnBnClickedOk)
-	ON_EN_CHANGE(IDC_EDIT1, &FileDlg::OnEnChangeEdit1)
+	//ON_EN_CHANGE(IDC_EDIT1, &FileDlg::OnEnChangeEdit1)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(FileDlg, CDialogEx)
@@ -76,6 +71,8 @@ BOOL FileDlg::OnInitDialog()
 	return TRUE;
 }
 
+//All functions TestFID are unnecessary
+//because response from card tells users what is wrong  
 void FileDlg::OnBnClickedOk()
 {
 	this->PartCmd->SetString( L"00 A4" );
@@ -85,8 +82,8 @@ void FileDlg::OnBnClickedOk()
 		this->PartCmd->Append(L" 02 0C 02 ");
 		this->FileID.GetWindowTextW(FID);
 
-		if(!TestFID(FID,4))
-			 return;
+		//if(!TestFID(FID,4))
+			// return;
 
 		this->PartCmd->Append(FID);
 	}
@@ -94,8 +91,8 @@ void FileDlg::OnBnClickedOk()
 		this->PartCmd->Append(L" 01 0C 02 ");
 		this->FileID.GetWindowTextW(FID);
 
-		if(!TestFID(FID,4))
-			 return;
+		//if(!TestFID(FID,4))
+			// return;
 
 		this->PartCmd->Append(FID);
 	}
@@ -103,13 +100,13 @@ void FileDlg::OnBnClickedOk()
 		this->PartCmd->Append(L" 04 0C 16 ");
 		this->FileID.GetWindowTextW(FID);
 
-		if(!TestFID(FID,16))
-			return;
+		//if(!TestFID(FID,16))
+			//return;
 
 		this->PartCmd->Append(FID);
 	}
 	else if(IsDlgButtonChecked( IDC_PARENT_DF )){
-		this->PartCmd->Append(L"03 0C");
+		this->PartCmd->Append(L" 03 0C");
 	}
 	else if(IsDlgButtonChecked( IDC_MF )){
 		this->PartCmd->Append(L" 00 0C 02 3F 00");
@@ -123,16 +120,17 @@ bool FileDlg::TestFID( CString FID , int Maxcount)
 {
 	FID.Remove(' ');
 		if( FID.GetLength() != Maxcount ){
-			this->MessageBox(L"Nieodpowiednia dlugosc FID", _T("File Window"), 0);
+			this->MessageBox(L"Nieodpowiednia dlugosc", _T("File Window"), 0);
 			return false;
 		}
 
 	return true;
 }
 
+/* In next Version
 void FileDlg::OnEnChangeEdit1()
 {
-	/*
+	
 	CString AllowedChars = L"0123456789ABCDEF ";
 	CString FileID,tmp;
 	
@@ -146,5 +144,6 @@ void FileDlg::OnEnChangeEdit1()
 		{
 			FileID.Remove("");
 		}
-	*/
+	
 }
+*/
