@@ -24,8 +24,7 @@ protected:
 public:
 	CComboBox AuthType;
 	CEdit PIN;
-	CEdit PUK;
+	CEdit NewPIN;
 	CEdit KeyNum;
-	CEdit ResKey;
 	afx_msg void OnBnClickedOk();
 };
