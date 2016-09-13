@@ -41,6 +41,7 @@ BOOL UpdateDlg::OnInitDialog()
 
 	this->FileOpt.InsertString(0, L"Transparent" );
 	this->FileOpt.InsertString(1, L"Record File" );
+	this->FileOpt.InsertString(2, L"Append Record" );
 	this->FileOpt.SetCurSel(0);
 
 	this->RecordNum.SetWindowTextW(L"1");
@@ -70,8 +71,8 @@ void UpdateDlg::OnBnClickedOk()
 		Padding = true;
 	}
 
-	if(Data.GetLength()/2 > 256)
-		this->MessageBox(L"Za du¿o wartoœci do wys³ania",_T("File Window" ),0);
+	//if(Data.GetLength()/2 > 256)
+	//	this->MessageBox(L"Za du¿o wartoœci do wys³ania",_T("File Window" ),0);
 	
 	DataLength = HexUtil::IntToHex(Data.GetLength()/2);
 	
@@ -83,6 +84,12 @@ void UpdateDlg::OnBnClickedOk()
 	{
 		this->PartCmd->SetString(L"00 D6 ");
 		this->PartCmd->Append(Offset + L" ");
+		this->PartCmd->Append(DataLength + L" ");
+		this->PartCmd->Append(Data);
+	}
+	else if( Filetype == "Append Record")
+	{
+		this->PartCmd->SetString(L"00 E2 00 00");
 		this->PartCmd->Append(DataLength + L" ");
 		this->PartCmd->Append(Data);
 	}
