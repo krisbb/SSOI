@@ -25,6 +25,5 @@ public:
 	CComboBox Mode;
 	CEdit KeyNum;
 	CEdit DataValue;
-	CComboBox Padding;
 	afx_msg void OnBnClickedOk();
 };
