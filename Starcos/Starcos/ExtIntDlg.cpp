@@ -59,6 +59,7 @@ void ExtIntDlg::OnBnClickedOk()
 	this->ExtIntChoice.GetWindowTextW(ExtIntChoice);
 	this->Challenge.GetWindowTextW(Challenge);
 	this->KeyNum.GetWindowTextW(KeyNum);
+	Challenge.MakeUpper();
 
 	if( ExtIntChoice == "Get Challenge")
 	{

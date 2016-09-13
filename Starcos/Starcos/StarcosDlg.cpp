@@ -64,7 +64,6 @@ CStarcosDlg::CStarcosDlg(CWnd* pParent /*=NULL*/)
 	, Command(_T(""))
 	, Response(_T(""))
 {
-	//Command.SetString( _T(" 00 A4 00 00"));
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
@@ -72,8 +71,6 @@ void CStarcosDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1 , Command);
-	//DDX_Text(pDX, IDC_EDIT2 , Response);
-	DDX_Control(pDX, IDC_TREE1 , DlgDirTree);
 	DDX_Control(pDX, IDC_EDIT1, CommandCtrl);
 	DDX_Control(pDX, IDC_COMBO1, TermList);
 	DDX_Control(pDX, IDC_RESP, ResponseCtrl);
@@ -90,17 +87,19 @@ BEGIN_MESSAGE_MAP(CStarcosDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON5, &CStarcosDlg::SendAPDU)
 	ON_BN_CLICKED(IDC_BUTTON6, &CStarcosDlg::getTermList)
 	ON_BN_CLICKED(IDC_BUTTON7, &CStarcosDlg::GetATR)
-	//ON_COMMAND(ID_FILE, &CStarcosDlg::SwitchToFileDlg)
 	ON_COMMAND(ID_FILE_SELECT, &CStarcosDlg::OnFileSelect)
 	ON_COMMAND(ID_FILE_READ, &CStarcosDlg::OnFileRead)
 	ON_COMMAND(ID_FILE_UPDATE32774, &CStarcosDlg::OnFileUpdate)
 	ON_COMMAND(ID_PIN, &CStarcosDlg::OnPIN)
-	//ON_COMMAND(ID_CIPHER, &CStarcosDlg::OnCipher)
 	ON_COMMAND(ID_CIPHER_ENC, &CStarcosDlg::OnCipherEnc)
 	ON_COMMAND(ID_CIPHER_SETENV, &CStarcosDlg::OnCipherSetenv)
 	ON_COMMAND(ID_KEY, &CStarcosDlg::OnSig)
-	ON_BN_CLICKED(IDC_BRUTEF, &CStarcosDlg::OnBnClickedBrutef)
 	ON_COMMAND(ID_AUTH, &CStarcosDlg::OnAuth)
+	ON_BN_CLICKED(IDC_EJECT, &CStarcosDlg::OnBnClickedEject)
+	ON_BN_CLICKED(IDC_TERMTYPE, &CStarcosDlg::OnBnClickedTermtype)
+	ON_BN_CLICKED(IDC_TERMVERSION, &CStarcosDlg::OnBnClickedTermversion)
+	ON_BN_CLICKED(IDC_LIBVERSION, &CStarcosDlg::OnBnClickedLibversion)
+	ON_BN_CLICKED(IDC_CARDTYPE, &CStarcosDlg::OnBnClickedCardtype)
 END_MESSAGE_MAP()
 
 
@@ -136,35 +135,6 @@ BOOL CStarcosDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
-
-	// na janusza tabcontrol
-	/*DlgTabCtrl.InsertItem( 0 , _T("File"));
-	DlgTabCtrl.InsertItem( 1 , _T("Auth"));
-	DlgTabCtrl.InsertItem( 2 , _T("Cipher"));
-	DlgTabCtrl.InsertItem( 3 , _T("Key"));*/
-
-	//janusz treeview
-	TVINSERTSTRUCT tvinsertstr;
-	tvinsertstr.hParent = NULL;
-	tvinsertstr.hInsertAfter = NULL;
-	tvinsertstr.item.mask = TVIF_TEXT;
-	tvinsertstr.item.pszText = _T("MF(3F00)");
-	
-	HTREEITEM MF = DlgDirTree.InsertItem(&tvinsertstr);
-	HTREEITEM DF = DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("DF(3F02)") , 0 , 0 , 0 , 0, 0 , MF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF1(3F03)") , 0 , 0 , 0 , 0, 0 , MF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF2(3F04)") , 0 , 0 , 0 , 0, 0 , MF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF3(3F05)") , 0 , 0 , 0 , 0, 0 , MF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF1(4001)") , 0 , 0 , 0 , 0, 0 , DF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF2(4002)") , 0 , 0 , 0 , 0, 0 , DF , NULL );
-	DlgDirTree.InsertItem(TVIF_TEXT ,
-		_T("EF3(4003)") , 0 , 0 , 0 , 0, 0 , DF , NULL );
 
 	STM_InitializeLibrary(TRUE);
 	
@@ -262,7 +232,6 @@ void CStarcosDlg::ButtonConnect()
 {
 	int iErr; 
 	
-	//STM_InitializeLibrary(TRUE);
 	// STM_OPEN_PCSC
 	iErr= STM_Open( &this->hCard, STM_OPEN_PCSC, STM_SHARED );
 	
@@ -292,7 +261,7 @@ void CStarcosDlg::ButtonDisconnect()
 	CString str1;
 	str1.Format(_T("Close return %x"), iErr);
 
-	//STM_DeinitializeLibrary();
+	STM_DeinitializeLibrary();
 	this->MessageBox( str1 , _T("File window") , 0);
 }
 
@@ -322,8 +291,8 @@ void CStarcosDlg::OpenExTerm()
 void CStarcosDlg::SendAPDU()
 {
 	this->CommandCtrl.GetWindowTextW(this->Command);
-	unsigned char Resp[400]; // test value 400 was 256 no idea why 
-	unsigned char cmd [400]; //{ 0x00 , 0xA4 , 0x00 , 0x0C , 0x02 , 0x3F , 0x02 };
+	unsigned char Resp[400]; 
+	unsigned char cmd [400];
 	
 	unsigned HowManyToSend = HexUtil::CStringToHex(cmd, this->Command);
 	unsigned HowManyReceived ;
@@ -335,187 +304,12 @@ void CStarcosDlg::SendAPDU()
 	else
 	{
 		CString str = HexUtil::HexToText( Resp , HowManyReceived );
-		
-		///*for( int i=0; i<HowManyReceived;i++)
-		//{
-		//	if(Resp[i] != 0 )
-		//		tmp.Format( _T("%x ") , Resp[i]);
-		//	else
-		//		tmp.Format( _T("0%x ") , Resp[i]);
-		//
-		//	str.Append(tmp);
-		//}*/
 
 		str.MakeUpper();
 		this->ResponseCtrl.SetWindowTextW(str);
-		this->MessageBox( str , _T("File window") , 0);
-	}	//this->Response.Format(_T("%s") , Resp );
+		//this->MessageBox( str , _T("File window") , 0);
+	}	
 }
-
-void CStarcosDlg::BruteForce()
-{
-	unsigned char Resp[400]; // test value 400 was 256 no idea why 
-	unsigned char cmd [400]; //{ 0x00 , 0xA4 , 0x00 , 0x0C , 0x02 , 0x3F , 0x02 };
-	unsigned char firstPartAPDU[] = { 0x00 , 0x2A , 0x00 , 0xA8 };//{ 0x00 , 0x2A , 0x86 , 0x80 };
-	int firstPartAPDULength = 4;
-	//unsigned char constValue = 0x82; //PADDING // I tried 81 ,00, 82
-
-	for(int i=0;i<firstPartAPDULength;i++)
-	{
-		cmd[i] = firstPartAPDU[i];
-	}
-
-	//openfile
-	//openFileHandle("bruteForce.txt");
-
-	//beginLoop
-	for(int i=1;i<255;i++)
-	{
-		//build dynamically APDU
-		//----BEGIN BUILD------
-
-		//cmd[firstPartAPDULength-2] = i + 2;
-		cmd[firstPartAPDULength] = i; // LC of APDU
-		//cmd[firstPartAPDULength+1] = constValue; //for example 81 for padding
-
-		//GENERATE DATA
-		
-		for(int j=0;j<i;j++)
-		{
-			cmd[firstPartAPDULength+1+j] = 0x11; // const value to encrypt
-		}
-
-		//add at the end 00 Le to receive all message
-		//cmd[firstPartAPDULength+i+1] = 0x00; //added 2 bcouse LC + LE 
-		//-----END BUILD -----
-
-		unsigned HowManyToSend = firstPartAPDULength+i+1;
-		unsigned HowManyReceived;
-		//send correctly APDU
-		if(STM_SendCard(this->hCard, HowManyToSend, cmd , 400, &HowManyReceived , Resp , 0 , 9000 ,0 ) != STM_OK)
-		{
-			ShowError(this->hCard);
-			//return;
-		}
-		else
-		{
-
-			//check if response is 9000 write APDU to file
-			//or if HowManyReceived is gt 2 
-			if(HowManyReceived > 2 )
-			{
-				//convert cmd to String and write to file
-				CString str = HexUtil::HexToText( cmd , HowManyToSend );
-				
-				printf("%s" , str);
-				//AppendToFile(str + "\n");
-			}
-			else if( HowManyReceived == 2 && Resp[0] != 106)
-			{
-				CString str = HexUtil::HexToText( cmd , HowManyToSend );
-				printf("%s" , str);
-				
-			}
-
-			//if length of data is FF break the loop
-		}	
-
-		//for(int k=0;k<HowManyToSend;k++)
-		//	printf("%x" ,cmd[k]);
-
-	//sleep for 1 second ?
-	Sleep(1000);
-
-	//endOfLoop 
-	}
-
-	//closeFileHandle();
-	//closeFileHandle
-}
-
-
-
-//void CStarcosDlg::BruteForce() to cipher .....
-//{
-//	unsigned char Resp[400]; // test value 400 was 256 no idea why 
-//	unsigned char cmd [400]; //{ 0x00 , 0xA4 , 0x00 , 0x0C , 0x02 , 0x3F , 0x02 };
-//	unsigned char firstPartAPDU[] = { 0x00 , 0x2A , 0x86 , 0x80 };
-//	int firstPartAPDULength = 6;
-//	unsigned char constValue = 0x82; //PADDING // I tried 81 ,00, 82
-//
-//	for(int i=0;i<firstPartAPDULength;i++)
-//	{
-//		cmd[i] = firstPartAPDU[i];
-//	}
-//
-//	//openfile
-//	//openFileHandle("bruteForce.txt");
-//
-//	//beginLoop
-//	for(int i=2;i<255;i++)
-//	{
-//		//build dynamically APDU
-//		//----BEGIN BUILD------
-//		cmd[firstPartAPDULength] = i; // LC of APDU
-//		cmd[firstPartAPDULength+1] = constValue; //for example 81 for padding
-//
-//		//GENERATE DATA
-//		
-//		for(int j=0;j<i-1;j++)
-//		{
-//			cmd[firstPartAPDULength+2+j] = 0x11; // const value to encrypt
-//		}
-//
-//		//add at the end 00 Le to receive all message
-//		cmd[firstPartAPDULength+i+1] = 0x00; //added 2 bcouse LC + LE 
-//		//-----END BUILD -----
-//
-//		unsigned HowManyToSend = firstPartAPDULength+i+2;
-//		unsigned HowManyReceived;
-//		//send correctly APDU
-//		if(STM_SendCard(this->hCard, HowManyToSend, cmd , 400, &HowManyReceived , Resp , 0 , 9000 ,0 ) != STM_OK)
-//		{
-//			ShowError(this->hCard);
-//			//return;
-//		}
-//		else
-//		{
-//
-//			//check if response is 9000 write APDU to file
-//			//or if HowManyReceived is gt 2 
-//			if(HowManyReceived > 2 )
-//			{
-//				//convert cmd to String and write to file
-//				CString str,tmp;
-//				for( int i=0; i<HowManyToSend;i++)
-//				{
-//					if(cmd[i] != 0 )
-//						tmp.Format( _T("%x ") , cmd[i]);
-//					else
-//						tmp.Format( _T("0%x ") , cmd[i]);
-//		
-//					str.Append(tmp);
-//				}
-//
-//				printf("%s" , str);
-//				//AppendToFile(str + "\n");
-//			}
-//
-//			//if length of data is FF break the loop
-//		}	
-//
-//		//for(int k=0;k<HowManyToSend;k++)
-//		//	printf("%x" ,cmd[k]);
-//
-//	//sleep for 1 second ?
-//	Sleep(1000);
-//
-//	//endOfLoop 
-//	}
-//
-//	//closeFileHandle();
-//	//closeFileHandle
-//}
 
 void CStarcosDlg::getTermList()
 {
@@ -562,19 +356,14 @@ void CStarcosDlg::GetATR()
 
 	STM_GetATR( this->hCard , LenATR, &Receive , ATR );
 	StringATR = HexUtil::HexToText( ATR , Receive );
+	StringATR.MakeUpper();
 
 	if(Receive != 0 )
-	this->MessageBox( StringATR  , _T("File window") , 0);
+		this->ResponseCtrl.SetWindowTextW(StringATR);
+	//this->MessageBox( StringATR  , _T("File window") , 0);
 	
 	delete [] ATR;
 }
-
-/*void CStarcosDlg::SwitchToFileDlg()
-{
-	
-	//??
-}
-*/
 
 void CStarcosDlg::OnFileSelect()
 {
@@ -616,19 +405,6 @@ void CStarcosDlg::OnPIN()
 		this->CommandCtrl.SetWindowTextW(Output);
 }
 
-//this doesn't work
-/*void CStarcosDlg::OnCipher()
-{
-	CString Output;
-	CipherDlg dlg(&Output);;
-	INT_PTR Response = dlg.DoModal();
-
-	if(Response == IDOK)
-		this->CommandCtrl.SetWindowTextW(Output);
-}*/
-
-
-
 void CStarcosDlg::OnCipherEnc()
 {
 	CString Output;
@@ -662,13 +438,6 @@ void CStarcosDlg::OnSig()
 }
 
 
-void CStarcosDlg::OnBnClickedBrutef()
-{
-	this->BruteForce();
-	// TODO: Add your control notification handler code here
-}
-
-
 void CStarcosDlg::OnAuth()
 {
 	CString Output;
@@ -677,4 +446,155 @@ void CStarcosDlg::OnAuth()
 
 	if(Response == IDOK)
 		this->CommandCtrl.SetWindowTextW(Output);
+}
+
+void CStarcosDlg::OnBnClickedEject()
+{
+	if(STM_Eject(this->hCard) != STM_OK)
+	{
+		ShowError(this->hCard);
+	}
+	else
+	{
+		CString str;
+		str.Format(_T("Eject Successfully"));
+
+		this->MessageBox( str , _T("File window") , 0);
+	}
+}
+
+void CStarcosDlg::OnBnClickedTermtype()
+{
+	unsigned uipType;
+
+	if( STM_GetTermType( this->hCard, &uipType) != STM_OK)
+	{
+		ShowError(this->hCard);
+	}
+	else
+	{
+		CString str;
+		
+		switch(uipType)
+		{
+			case STM_CT :
+				str.Format(_T("CT type not defined"));
+				break;
+			case STM_CT_MKT :
+				str.Format(_T("MultiFunctional card Terminal (MKT)"));
+				break;
+			case STM_CT_MKT_D :
+				str.Format(_T("MKT with display"));
+				break;
+			case STM_CT_MKT_K :
+				str.Format(_T("MKT with keypad"));
+				break;
+			case STM_CT_MKT_DK :
+				str.Format(_T("MKT with display and keypad"));
+				break;
+			default:
+				str.Format(_T("TermType doesn't recognise"));
+				break;
+		}
+
+		this->MessageBox( str , _T("File window") , 0);
+	}
+}
+
+void CStarcosDlg::OnBnClickedTermversion()
+{
+	TCHAR szVerTxt[96];
+	
+	if(STM_TermVersion( this->hCard, szVerTxt) != STM_OK)
+	{
+			ShowError(this->hCard);
+	}
+	else
+	{
+		this->MessageBox( szVerTxt ,  _T("File window") , 0);
+	}
+}
+
+void CStarcosDlg::OnBnClickedLibversion()
+{
+	TCHAR szVerTxt[151];
+	
+	if( STM_LibVersion(szVerTxt)  != STM_OK)
+	{
+			this->MessageBox( L"Doesn't recognise Library Version" ,  _T("File window") , 0);
+	}
+	else
+	{
+		this->MessageBox( szVerTxt ,  _T("File window") , 0);
+	}
+}
+
+void CStarcosDlg::OnBnClickedCardtype()
+{
+	unsigned uipType;
+
+	if( STM_GetCardType( this->hCard, &uipType) != STM_OK )
+	{
+		ShowError(this->hCard);
+	}
+	else
+	{
+		CString str;
+		switch(uipType)
+		{
+			case STM_CARD :
+				str.Format(_T("smart card type not defined"));
+				break;
+			case STM_CARD_ISO :
+				str.Format(_T("smart card according to ISO/IEC 7816-4"));
+				break;
+			case STM_CARD_S11 :
+				str.Format(_T("STARCOS S 1.1 card"));
+				break;
+			case STM_CARD_S12 :
+				str.Format(_T("STARCOS S 1.2 card"));
+				break;
+			case STM_CARD_S21 :
+				str.Format(_T("STARCOS S 2.1 card"));
+				break;
+			case STM_CARD_S25 :
+				str.Format(_T("STARCOS S 2.5 card"));
+				break;
+			case STM_CARD_S3 :
+				str.Format(_T("STARCOS 3.x card(default)"));
+				break;
+			case STM_CARD_SPK21 :
+				str.Format(_T("STARCOS SPK 2.1 card"));
+				break;
+			case STM_CARD_SPK22 :
+				str.Format(_T("STARCOS SPK 2.2 card"));
+				break;
+			case STM_CARD_SPK23 :
+				str.Format(_T("STARCOS SPK 2.3 card"));
+				break;
+			case STM_CARD_SPK24 :
+				str.Format(_T("STARCOS SPK 2.4 card"));
+				break;
+			case STM_CARD_SPK25 :
+				str.Format(_T("STARCOS SPK 2.5 card"));
+				break;
+			case STM_CARD_AIR10 :
+				str.Format(_T("STARCOS Air 1.0 card"));
+				break;
+			case STM_CARD_SV10 :
+				str.Format(_T("STARCOS StarVisa 1.0"));
+				break;
+			case STM_CARD_GSM2 :
+				str.Format(_T("GSM Phase 2 card"));
+				break;
+			case STM_CARD_OP201 :
+				str.Format(_T("Open Platform 2.0.1' compatible card"));
+				break;
+			default:
+				str.Format(_T( "CardType doesn't recognise" ));
+				break;
+		}
+
+		this->MessageBox( str , _T("File window") , 0);
+	}
 }

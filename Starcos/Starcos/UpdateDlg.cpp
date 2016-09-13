@@ -71,6 +71,7 @@ void UpdateDlg::OnBnClickedOk()
 		Padding = true;
 	}
 
+	Data.MakeUpper();
 	//if(Data.GetLength()/2 > 256)
 	//	this->MessageBox(L"Za du¿o wartoœci do wys³ania",_T("File Window" ),0);
 	

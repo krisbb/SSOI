@@ -61,6 +61,7 @@ void SigDlg::OnBnClickedOk()
 	
 	this->Choice.GetWindowTextW(Choice);
 	this->DataValue.GetWindowTextW(Data);
+	Data.MakeUpper();
 
 	if( Choice == "Compute Signature From Buffer")
 	{

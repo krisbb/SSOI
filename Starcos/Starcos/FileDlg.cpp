@@ -81,7 +81,7 @@ void FileDlg::OnBnClickedOk()
 	if(IsDlgButtonChecked( IDC_FID_EF )){
 		this->PartCmd->Append(L" 02 0C 02 ");
 		this->FileID.GetWindowTextW(FID);
-
+		FID.MakeUpper();
 		//if(!TestFID(FID,4))
 			// return;
 
@@ -90,7 +90,7 @@ void FileDlg::OnBnClickedOk()
 	else if(IsDlgButtonChecked( IDC_FID_DF )){
 		this->PartCmd->Append(L" 01 0C 02 ");
 		this->FileID.GetWindowTextW(FID);
-
+		FID.MakeUpper();
 		//if(!TestFID(FID,4))
 			// return;
 
@@ -99,7 +99,7 @@ void FileDlg::OnBnClickedOk()
 	else if(IsDlgButtonChecked( IDC_AID_DF )){
 		this->PartCmd->Append(L" 04 0C 16 ");
 		this->FileID.GetWindowTextW(FID);
-
+		FID.MakeUpper();
 		//if(!TestFID(FID,16))
 			//return;
 

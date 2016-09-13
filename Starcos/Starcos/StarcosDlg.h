@@ -34,14 +34,12 @@ protected:
 public:
 	CString Command;
 	CString Response;
-	CTreeCtrl DlgDirTree;
 	void ButtonConnect();
 	void ButtonDisconnect();
 	void Request();
 
 	void ShowError(stmHandle hCard );
 	stmHandle hCard;
-	void BruteForce();
 
 	afx_msg void OpenExTerm();
 	afx_msg void SendAPDU();
@@ -49,16 +47,19 @@ public:
 	afx_msg void getTermList();
 	CComboBox TermList;
 	afx_msg void GetATR();
-	//afx_msg void SwitchToFileDlg();
 	afx_msg void OnFileSelect();
 	afx_msg void OnFileRead();
 	afx_msg void OnFileUpdate();
 	afx_msg void OnPIN();
-	//afx_msg void OnCipher();
 	afx_msg void OnCipherEnc();
 	afx_msg void OnCipherSetenv();
 	afx_msg void OnSig();
 	afx_msg void OnBnClickedBrutef();
 	CEdit ResponseCtrl;
 	afx_msg void OnAuth();
+	afx_msg void OnBnClickedEject();
+	afx_msg void OnBnClickedTermtype();
+	afx_msg void OnBnClickedTermversion();
+	afx_msg void OnBnClickedLibversion();
+	afx_msg void OnBnClickedCardtype();
 };
