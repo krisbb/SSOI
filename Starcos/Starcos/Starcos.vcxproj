@@ -106,6 +106,7 @@
     <ClInclude Include="AuthDlg.h" />
     <ClInclude Include="CipherDlg.h" />
     <ClInclude Include="EnvDlg.h" />
+    <ClInclude Include="ExtIntDlg.h" />
     <ClInclude Include="FileDlg.h" />
     <ClInclude Include="HexUtil.h" />
     <ClInclude Include="ReadDlg.h" />
@@ -123,6 +124,7 @@
     <ClCompile Include="AuthDlg.cpp" />
     <ClCompile Include="CipherDlg.cpp" />
     <ClCompile Include="EnvDlg.cpp" />
+    <ClCompile Include="ExtIntDlg.cpp" />
     <ClCompile Include="FileDlg.cpp" />
     <ClCompile Include="HexUtil.cpp" />
     <ClCompile Include="ReadDlg.cpp" />

@@ -69,6 +69,9 @@
     <ClInclude Include="SigDlg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExtIntDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Starcos.cpp">
@@ -89,9 +92,6 @@
     <ClCompile Include="UpdateDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AuthDlg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CipherDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -102,6 +102,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SigDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExtIntDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
