@@ -37,8 +37,10 @@ BOOL CipherDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 	
-	this->Mode.AddString(L"Encipher");
-	this->Mode.AddString(L"Decipher");
+	this->Mode.InsertString(0, L"Encipher");
+	this->Mode.InsertString(1, L"Decipher");
+	this->Mode.InsertString(2, L"Generate Keys");
+	
 	this->Mode.SetCurSel(0);
 
 	return TRUE;
@@ -66,6 +68,10 @@ void CipherDlg::OnBnClickedOk()
 		DataLength = HexUtil::IntToHex(HexUtil::GetLength(Data));
 		this->PartCmd->SetString( L"00 2A 80 86 ");
 		this->PartCmd->Append(DataLength + L" " + Data + L" 00");
+	}
+	else if( Mode == "Generate Keys")
+	{
+		this->PartCmd->SetString( L"00 46 00 00");
 	}
 
 	CDialogEx::OnOK();

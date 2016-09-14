@@ -316,7 +316,11 @@ void CStarcosDlg::getTermList()
 	unsigned Buflen = 255, OutputSize;
 	wchar_t * TermList = new wchar_t[Buflen];
 
-	STM_GetTermList( STM_LIST_ALL , Buflen , &OutputSize , TermList);
+	if( STM_GetTermList( STM_LIST_ALL , Buflen , &OutputSize , TermList) != STM_OK )
+	{
+		this->MessageBox( L"Error in GetTermList" , _T("File Window") , 0);
+		return;
+	}
 
 	if(OutputSize < 2 ){
 		delete [] TermList;
