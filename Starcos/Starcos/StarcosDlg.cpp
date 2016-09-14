@@ -76,6 +76,11 @@ void CStarcosDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RESP, ResponseCtrl);
 }
 
+void CStarcosDlg::OnOK()
+{
+	this->SendAPDU();
+}
+
 BEGIN_MESSAGE_MAP(CStarcosDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
